@@ -46,6 +46,8 @@ export async function getTopPairs<T extends boolean>(
   const epochSecond = Math.floor(new Date().getTime() / 1000)
   const dayId = Math.floor(epochSecond / 86400)
   const dayStartTime = dayId * 86400
+  const todayVolumeWeight = (epochSecond - dayStartTime) / 86400
+  const yesterdayVolumeWeight = 1 - todayVolumeWeight
   const {
     data: { pairs, yesterdaysVolume }
   } = await client.query<{
@@ -65,8 +67,8 @@ export async function getTopPairs<T extends boolean>(
   const indexedPreviousDayVolume =
     yesterdaysVolume?.reduce<IndexedVolume>((memo: IndexedVolume, curr): IndexedVolume => {
       memo[curr.id] = {
-        volumeToken0: new BigNumber(curr.dailyVolumeToken0),
-        volumeToken1: new BigNumber(curr.dailyVolumeToken1)
+        volumeToken0: new BigNumber(curr.dailyVolumeToken0).multipliedBy(yesterdayVolumeWeight),
+        volumeToken1: new BigNumber(curr.dailyVolumeToken1).multipliedBy(yesterdayVolumeWeight)
       }
       return memo
     }, {}) ?? {}
@@ -80,9 +82,11 @@ export async function getTopPairs<T extends boolean>(
               ? new BigNumber(pair.reserve1).dividedBy(pair.reserve0).toString()
               : undefined,
           dailyVolumeToken0: new BigNumber(pair.dailyVolumeToken0)
+            .multipliedBy(todayVolumeWeight)
             .plus(indexedPreviousDayVolume[pair.id]?.volumeToken0 ?? '0')
             .toString(),
           dailyVolumeToken1: new BigNumber(pair.dailyVolumeToken1)
+            .multipliedBy(todayVolumeWeight)
             .plus(indexedPreviousDayVolume[pair.id]?.volumeToken1 ?? '0')
             .toString()
         })
