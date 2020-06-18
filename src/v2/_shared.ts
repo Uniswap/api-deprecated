@@ -59,8 +59,8 @@ export async function getTopPairs<T extends boolean>(
       limit: TOP_PAIR_LIMIT,
       excludeTokenIds: BLACKLIST,
       detailed,
-      today: dayStartTime,
-      yesterday: dayStartTime - 86400
+      todayStartTime: dayStartTime,
+      yesterdayStartTime: dayStartTime - 86400
     }
   })
 
