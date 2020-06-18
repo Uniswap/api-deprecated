@@ -29,6 +29,14 @@ export interface DetailedPair extends Pair {
   dailyVolumeToken0: string
   dailyVolumeToken1: string
 }
+interface YesterdaysVolume {
+  id: string
+  dailyVolumeToken0: string
+  dailyVolumeToken1: string
+}
+interface IndexedVolume {
+  [pairId: string]: { volumeToken0: BigNumber; volumeToken1: BigNumber }
+}
 export interface MappedDetailedPair extends DetailedPair {
   price?: string
 }
@@ -39,25 +47,44 @@ export async function getTopPairs<T extends boolean>(
   const dayId = Math.floor(epochSecond / 86400)
   const dayStartTime = dayId * 86400
   const {
-    data: { pairDayDatas: pairs }
-  } = await client.query({
+    data: { pairs, yesterdaysVolume }
+  } = await client.query<{
+    pairs: T extends true ? DetailedPair[] : Pair[]
+    yesterdaysVolume: T extends true ? YesterdaysVolume[] : undefined
+  }>({
     query: TOP_PAIRS,
     variables: {
       limit: TOP_PAIR_LIMIT,
       excludeTokenIds: BLACKLIST,
       detailed,
-      // yesterday's data
-      date: dayStartTime
+      today: dayStartTime,
+      yesterday: dayStartTime - 86400
     }
   })
+
+  const indexedPreviousDayVolume =
+    yesterdaysVolume?.reduce<IndexedVolume>((memo: IndexedVolume, curr): IndexedVolume => {
+      memo[curr.id] = {
+        volumeToken0: new BigNumber(curr.dailyVolumeToken0),
+        volumeToken1: new BigNumber(curr.dailyVolumeToken1)
+      }
+      return memo
+    }, {}) ?? {}
+
   return detailed
-    ? pairs.map(
+    ? (pairs as any).map(
         (pair: DetailedPair): MappedDetailedPair => ({
           ...pair,
           price:
             pair.reserve0 !== '0' && pair.reserve1 !== '0'
               ? new BigNumber(pair.reserve1).dividedBy(pair.reserve0).toString()
-              : undefined
+              : undefined,
+          dailyVolumeToken0: new BigNumber(pair.dailyVolumeToken0)
+            .plus(indexedPreviousDayVolume[pair.id]?.volumeToken0 ?? '0')
+            .toString(),
+          dailyVolumeToken1: new BigNumber(pair.dailyVolumeToken1)
+            .plus(indexedPreviousDayVolume[pair.id]?.volumeToken1 ?? '0')
+            .toString()
         })
       )
     : pairs

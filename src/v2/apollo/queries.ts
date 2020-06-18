@@ -12,8 +12,8 @@ export const TOP_PAIRS = gql`
     dailyVolumeToken0
     dailyVolumeToken1
   }
-  query($limit: Int!, $excludeTokenIds: [String!]!, $date: Int!, $detailed: Boolean = false) {
-    pairDayDatas(
+  query($limit: Int!, $excludeTokenIds: [String!]!, $today: Int!, $yesterday: Int!, $detailed: Boolean = false) {
+    pairs: pairDayDatas(
       first: $limit
       orderBy: reserveUSD
       orderDirection: desc
@@ -28,6 +28,17 @@ export const TOP_PAIRS = gql`
       }
 
       ...DetailedPairInfo @include(if: $detailed)
+    }
+
+    yesterdaysVolume: pairDayDatas(
+      first: $limit
+      orderBy: reserveUSD
+      orderDirection: desc
+      where: { token0_not_in: $excludeTokenIds, token1_not_in: $excludeTokenIds, date: $yesterday }
+    ) @include(if: $detailed) {
+      id
+      dailyVolumeToken0
+      dailyVolumeToken1
     }
   }
 `
