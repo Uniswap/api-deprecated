@@ -20,33 +20,33 @@ functions:
     events:
       - http:
           method: get
-          path: v1/summary
+          path: /v1/summary
 
   v1-tickers:
     handler: src/v1/tickers.handler
     events:
       - http:
           method: get
-          path: v1/tickers
+          path: /v1/tickers
 
   v2-summary:
     handler: src/v2/summary.handler
     events:
       - http:
           method: get
-          path: v2/summary
+          path: /v2/summary
 
   v2-tickers:
     handler: src/v2/tickers.handler
     events:
       - http:
           method: get
-          path: v2/tickers
+          path: /v2/tickers
 
   404:
     handler: src/404.handler
     events:
       - http:
           method: get
-          path: '*'
+          path: "/{catchall+}"
 
