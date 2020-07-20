@@ -3,6 +3,12 @@
   "version": 2,
   "alias": "api.uniswap.info",
   "builds": [{ "src": "src/**/*.ts", "use": "@now/node" }],
+  "functions": {
+    "src/**/*.ts": {
+      "memory": 128,
+      "maxDuration": 6
+    }
+  },
   "routes": [
     { "src": "/v1/summary", "dest": "/src/v1/summary.ts", "methods": ["GET"] },
     { "src": "/v1/assets", "dest": "/src/v1/assets.ts", "methods": ["GET"] },
