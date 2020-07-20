@@ -1,28 +1,25 @@
 import { getAddress } from '@ethersproject/address'
+import { APIGatewayProxyHandler } from 'aws-lambda'
 import BigNumber from 'bignumber.js'
-import { NowRequest, NowResponse } from '@now/node'
-import { return200, return400, return500 } from '../utils/response'
+import { createSuccessResponse, createBadRequestResponse, createServerErrorResponse } from '../utils/response'
 
 import { getReserves } from './_shared'
 import { computeBidsAsks } from '../utils/computeBidsAsks'
 
-export default async function(req: NowRequest, res: NowResponse): Promise<void> {
+export const handler: APIGatewayProxyHandler = async event => {
   if (
-    !req.query.pair ||
-    typeof req.query.pair !== 'string' ||
-    !/^0x[0-9a-fA-F]{40}_0x[0-9a-fA-F]{40}$/.test(req.query.pair)
+    !event.queryStringParameters?.pair ||
+    !/^0x[0-9a-fA-F]{40}_0x[0-9a-fA-F]{40}$/.test(event.queryStringParameters.pair)
   ) {
-    return400(res, 'Invalid pair identifier: must be of format tokenAddress_tokenAddress')
-    return
+    return createBadRequestResponse('Invalid pair identifier: must be of format tokenAddress_tokenAddress')
   }
 
-  const [tokenA, tokenB] = req.query.pair.split('_')
+  const [tokenA, tokenB] = event.queryStringParameters?.pair.split('_')
   let idA: string, idB: string
   try {
     ;[idA, idB] = [getAddress(tokenA), getAddress(tokenB)]
   } catch (error) {
-    return400(res)
-    return
+    return createBadRequestResponse('Invalid pair identifier: both addresses must be *checksummed*')
   }
 
   try {
@@ -30,8 +27,7 @@ export default async function(req: NowRequest, res: NowResponse): Promise<void> 
 
     const timestamp = new Date().getTime()
 
-    return200(
-      res,
+    return createSuccessResponse(
       {
         timestamp,
         ...computeBidsAsks(new BigNumber(reservesA), new BigNumber(reservesB))
@@ -39,6 +35,6 @@ export default async function(req: NowRequest, res: NowResponse): Promise<void> 
       60 * 15
     )
   } catch (error) {
-    return500(res, error)
+    return createServerErrorResponse(error)
   }
 }

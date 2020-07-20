@@ -1,6 +1,6 @@
-import { NowRequest, NowResponse } from '@now/node'
-import { returnError } from './utils/response'
+import { APIGatewayProxyHandler } from 'aws-lambda'
+import { createErrorResponse } from './utils/response'
 
-export default async function(req: NowRequest, res: NowResponse): Promise<void> {
-  returnError(res, 404, 'Invalid URL')
+export const handler: APIGatewayProxyHandler = async event => {
+  return createErrorResponse(404, 'Invalid route')
 }

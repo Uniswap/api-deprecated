@@ -1,0 +1,52 @@
+service:
+  name: uniswap-api
+
+frameworkVersion: ">=1.75.1 <2.0.0"
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 128 # optional, in MB, default is 1024
+  timeout: 4 # optional, in seconds, default is 6
+  logRetentionInDays: 1
+
+
+plugins:
+  - serverless-plugin-typescript
+
+functions:
+  v1-summary:
+    handler: src/v1/summary.handler
+    events:
+      - http:
+          method: get
+          path: v1/summary
+
+  v1-tickers:
+    handler: src/v1/tickers.handler
+    events:
+      - http:
+          method: get
+          path: v1/tickers
+
+  v2-summary:
+    handler: src/v2/summary.handler
+    events:
+      - http:
+          method: get
+          path: v2/summary
+
+  v2-tickers:
+    handler: src/v2/tickers.handler
+    events:
+      - http:
+          method: get
+          path: v2/tickers
+
+  404:
+    handler: src/404.handler
+    events:
+      - http:
+          method: get
+          path: '*'
+

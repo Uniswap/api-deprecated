@@ -1,26 +1,23 @@
-import { NowRequest, NowResponse } from '@now/node'
+import { APIGatewayProxyHandler } from 'aws-lambda'
 
 import { getOrderbook } from './_shared'
-import { return200, return400, return500 } from '../utils/response'
+import { createSuccessResponse, createBadRequestResponse, createServerErrorResponse } from '../utils/response'
 
-export default async function(req: NowRequest, res: NowResponse): Promise<NowResponse> {
-  if (!req.query.pair || typeof req.query.pair !== 'string' || !/^ETH_0x[0-9a-fA-F]{40}$/.test(req.query.pair)) {
-    return return400(res)
+export const handler: APIGatewayProxyHandler = async event => {
+  if (!event.queryStringParameters?.pair || !/^ETH_0x[0-9a-fA-F]{40}$/.test(event.queryStringParameters.pair)) {
+    return createBadRequestResponse()
   }
 
-  return await getOrderbook(req.query.pair.substring(4))
-    .then(
-      (orderbook): NowResponse => {
-        return return200(
-          res,
-          {
-            timestamp: orderbook.timestamp,
-            bids: orderbook.bids,
-            asks: orderbook.asks
-          },
-          60 * 15 // cache for 15 minutes
-        )
-      }
-    )
-    .catch((error): NowResponse => return500(res, error))
+  return await getOrderbook(event.queryStringParameters.pair.substring(4))
+    .then(orderbook => {
+      return createSuccessResponse(
+        {
+          timestamp: orderbook.timestamp,
+          bids: orderbook.bids,
+          asks: orderbook.asks
+        },
+        60 * 15 // cache for 15 minutes
+      )
+    })
+    .catch(error => createServerErrorResponse(error))
 }
