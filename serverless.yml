@@ -6,7 +6,7 @@ frameworkVersion: ">=1.75.1 <2.0.0"
 provider:
   name: aws
   runtime: nodejs12.x
-  memorySize: 128 # optional, in MB, default is 1024
+  memorySize: 512 # optional, in MB, default is 1024
   timeout: 12 # optional, in seconds, default is 6
   logRetentionInDays: 1
 
