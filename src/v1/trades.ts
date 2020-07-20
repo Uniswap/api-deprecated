@@ -4,11 +4,11 @@ import { getTrades } from './_shared'
 import { createSuccessResponse, createBadRequestResponse, createServerErrorResponse } from '../utils/response'
 
 export const handler: APIGatewayProxyHandler = async event => {
-  if (!event.queryStringParameters?.pair || !/^ETH_0x[0-9a-fA-F]{40}$/.test(event.queryStringParameters.pair)) {
+  if (!event.pathParameters?.pair || !/^ETH_0x[0-9a-fA-F]{40}$/.test(event.pathParameters.pair)) {
     return createBadRequestResponse()
   }
 
-  return await getTrades(event.queryStringParameters.pair.substring(4))
+  return await getTrades(event.pathParameters.pair.substring(4))
     .then(trades => {
       return createSuccessResponse(
         trades.map((trades): any => ({

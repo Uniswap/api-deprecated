@@ -29,6 +29,27 @@ functions:
           method: get
           path: /v1/tickers
 
+  v1-assets:
+    handler: src/v1/assets.handler
+    events:
+      - http:
+          method: get
+          path: /v1/assets
+
+  v1-orderbook:
+    handler: src/v1/orderbook.handler
+    events:
+      - http:
+          method: get
+          path: "/v1/orderbook/{pair}"
+
+  v1-trades:
+    handler: src/v1/trades.handler
+    events:
+      - http:
+          method: get
+          path: "/v1/trades/{pair}"
+
   v2-summary:
     handler: src/v2/summary.handler
     events:
@@ -42,6 +63,28 @@ functions:
       - http:
           method: get
           path: /v2/tickers
+
+
+  v2-assets:
+    handler: src/v2/assets.handler
+    events:
+      - http:
+          method: get
+          path: /v2/assets
+
+  v2-orderbook:
+    handler: src/v2/orderbook.handler
+    events:
+      - http:
+          method: get
+          path: "/v2/orderbook/{pair}"
+
+  v2-trades:
+    handler: src/v2/trades.handler
+    events:
+      - http:
+          method: get
+          path: "/v2/trades/{pair}"
 
   404:
     handler: src/404.handler

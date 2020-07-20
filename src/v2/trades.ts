@@ -6,14 +6,11 @@ import { getSwaps } from './_shared'
 import { createSuccessResponse, createBadRequestResponse, createServerErrorResponse } from '../utils/response'
 
 export const handler: APIGatewayProxyHandler = async event => {
-  if (
-    !event.queryStringParameters?.pair ||
-    !/^0x[0-9a-fA-F]{40}_0x[0-9a-fA-F]{40}$/.test(event.queryStringParameters.pair)
-  ) {
+  if (!event.pathParameters?.pair || !/^0x[0-9a-fA-F]{40}_0x[0-9a-fA-F]{40}$/.test(event.pathParameters.pair)) {
     return createBadRequestResponse('Invalid pair identifier: must be of format tokenAddress_tokenAddress')
   }
 
-  const [tokenA, tokenB] = event.queryStringParameters.pair.split('_')
+  const [tokenA, tokenB] = event.pathParameters.pair.split('_')
   let idA: string, idB: string
   try {
     ;[idA, idB] = [getAddress(tokenA), getAddress(tokenB)]
