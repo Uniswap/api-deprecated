@@ -48,8 +48,6 @@ export async function getTopPairs(): Promise<MappedDetailedPair[]> {
     throw new Error('first block was not fetched')
   }
 
-  console.debug('Fetching pair info for historical block', firstBlock)
-
   const {
     data: { pairs },
     errors: topPairsErrors
