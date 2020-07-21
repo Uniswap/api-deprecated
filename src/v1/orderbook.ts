@@ -16,7 +16,7 @@ export const handler: APIGatewayProxyHandler = async event => {
           bids: orderbook.bids,
           asks: orderbook.asks
         },
-        60 * 15 // cache for 15 minutes
+        60 * 240 // cache for 15 minutes
       )
     })
     .catch(error => createServerErrorResponse(error))

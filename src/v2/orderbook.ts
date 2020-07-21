@@ -29,7 +29,7 @@ export const handler: APIGatewayProxyHandler = async event => {
         timestamp,
         ...computeBidsAsks(new BigNumber(reservesA), new BigNumber(reservesB))
       },
-      60 * 15
+      60 * 240
     )
   } catch (error) {
     return createServerErrorResponse(error)
