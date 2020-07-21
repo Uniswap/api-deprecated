@@ -6,7 +6,7 @@ export function createResponse(statusCode: number, body: any, { maxAge }: { maxA
     statusCode,
     headers: {
       'content-type': 'application/json',
-      'cache-control': `max-age=0, s-maxage=${maxAge}`
+      'cache-control': `max-age=${maxAge}, s-maxage=${maxAge}`
     }
   }
 }

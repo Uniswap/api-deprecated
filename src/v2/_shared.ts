@@ -3,7 +3,13 @@ import gql from 'graphql-tag'
 import BLACKLIST from '../constants/blacklist'
 
 import client from './apollo/client'
-import { PAIR_RESERVES_BY_TOKENS, PAIRS_VOLUME_QUERY_STRING, SWAPS_BY_PAIR, TOP_PAIRS, PAIR_FROM_TOKENS } from './apollo/queries'
+import {
+  PAIR_RESERVES_BY_TOKENS,
+  PAIRS_VOLUME_QUERY_STRING,
+  SWAPS_BY_PAIR,
+  TOP_PAIRS,
+  PAIR_FROM_TOKENS
+} from './apollo/queries'
 import { getBlockFromTimestamp } from './blocks/queries'
 import {
   PairReservesQuery,
@@ -161,17 +167,18 @@ interface SwapMapped extends Swap {
 export async function getSwaps(tokenA: string, tokenB: string): Promise<SwapMapped[]> {
   const _24HoursAgo = get24HoursAgo()
   const [token0, token1] = sortedFormatted(tokenA, tokenB)
-  
-  let {data : {
-    pairs : [{id: pairAddress}]
-  }} = await client.query({
+
+  let {
+    data: {
+      pairs: [{ id: pairAddress }]
+    }
+  } = await client.query({
     query: PAIR_FROM_TOKENS,
     variables: {
       token0,
       token1
     }
   })
-
 
   const sorted = isSorted(tokenA, tokenB)
   let skip = 0
@@ -187,31 +194,25 @@ export async function getSwaps(tokenA: string, tokenB: string): Promise<SwapMapp
           timestamp: _24HoursAgo
         }
       })
-      .then(
-        ({
-          data: {
-            swaps
-          }
-        }): void => {
-          if (!swaps || swaps.length === 0) {
-            finished = true
-          } else {
-            skip += swaps.length
+      .then(({ data: { swaps } }): void => {
+        if (!swaps || swaps.length === 0) {
+          finished = true
+        } else {
+          skip += swaps.length
 
-            results = results.concat(
-              swaps.map(
-                (swap: Swap): SwapMapped => ({
-                  ...swap,
-                  amountAIn: sorted ? swap.amount0In : swap.amount1In,
-                  amountAOut: sorted ? swap.amount0Out : swap.amount1Out,
-                  amountBIn: sorted ? swap.amount1In : swap.amount0In,
-                  amountBOut: sorted ? swap.amount1Out : swap.amount0Out
-                })
-              )
+          results = results.concat(
+            swaps.map(
+              (swap: Swap): SwapMapped => ({
+                ...swap,
+                amountAIn: sorted ? swap.amount0In : swap.amount1In,
+                amountAOut: sorted ? swap.amount0Out : swap.amount1Out,
+                amountBIn: sorted ? swap.amount1In : swap.amount0In,
+                amountBOut: sorted ? swap.amount1Out : swap.amount0Out
+              })
             )
-          }
+          )
         }
-      )
+      })
   }
 
   return results
