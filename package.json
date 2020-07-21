@@ -1,5 +1,5 @@
 {
-  "name": "uniswap-api",
+  "name": "@uniswap/api",
   "license": "GPL-3.0-or-later",
   "engines": {
     "node": "12.x"
@@ -10,6 +10,7 @@
     "apollo-client": "^2.6.3",
     "apollo-link-http": "^1.5.15",
     "bignumber.js": "^9.0.0",
+    "graphql": "^15.3.0",
     "graphql-tag": "^2.10.1",
     "node-fetch": "^2.6.0"
   },
@@ -17,15 +18,17 @@
     "@graphql-codegen/cli": "1.15.4",
     "@graphql-codegen/typescript": "1.15.4",
     "@graphql-codegen/typescript-operations": "^1.15.4",
-    "@now/node": "^0.10.0",
+    "@types/aws-lambda": "^8.10.59",
     "@types/node-fetch": "^2.3.7",
     "@typescript-eslint/eslint-plugin": "^1.11.0",
     "@typescript-eslint/parser": "^1.11.0",
     "eslint": "^5.0.0",
     "eslint-config-prettier": "^6.0.0",
-    "graphql": "^15.1.0",
     "prettier": "^1.18.2",
-    "typescript": "^3.5.2"
+    "serverless": "^1.75.1",
+    "serverless-api-cloudfront": "^0.9.5",
+    "serverless-plugin-typescript": "^1.1.9",
+    "typescript": "^3.9.7"
   },
   "scripts": {
     "lint:base": "yarn eslint ./src/**/*.ts",
@@ -36,6 +39,7 @@
     "check:lint": "yarn lint:base",
     "check:format": "yarn format:base --check",
     "check:all": "yarn check:lint && yarn check:format",
-    "generate:v2": "graphql-codegen --config src/v2/apollo/codegen.yml"
+    "generate:v2": "graphql-codegen --config src/v2/apollo/codegen.yml",
+    "build": "sls package"
   }
 }

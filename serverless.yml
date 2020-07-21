@@ -1,0 +1,107 @@
+service:
+  name: uniswap-api
+
+frameworkVersion: ">=1.75.1 <2.0.0"
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 320 # optional, in MB, default is 1024
+  timeout: 20 # optional, in seconds, default is 6
+  logRetentionInDays: 1
+
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-api-cloudfront
+
+custom:
+  apiCloudFront:
+    domain: api.uniswap.info
+    certificate: "arn:aws:acm:us-east-1:870337023970:certificate/442d57cb-e33e-45d1-b836-5fd0abd57930"
+    compress: true
+    cookies: none
+    headers: none
+    querystring: none
+    priceClass: PriceClass_100
+    minimumProtocolVersion: TLSv1
+
+functions:
+  v1-summary:
+    handler: src/v1/summary.handler
+    events:
+      - http:
+          method: get
+          path: /v1/summary
+
+  v1-tickers:
+    handler: src/v1/tickers.handler
+    events:
+      - http:
+          method: get
+          path: /v1/tickers
+
+  v1-assets:
+    handler: src/v1/assets.handler
+    events:
+      - http:
+          method: get
+          path: /v1/assets
+
+  v1-orderbook:
+    handler: src/v1/orderbook.handler
+    events:
+      - http:
+          method: get
+          path: "/v1/orderbook/{pair}"
+
+  v1-trades:
+    handler: src/v1/trades.handler
+    events:
+      - http:
+          method: get
+          path: "/v1/trades/{pair}"
+
+  v2-summary:
+    handler: src/v2/summary.handler
+    events:
+      - http:
+          method: get
+          path: /v2/summary
+
+  v2-tickers:
+    handler: src/v2/tickers.handler
+    events:
+      - http:
+          method: get
+          path: /v2/tickers
+
+
+  v2-assets:
+    handler: src/v2/assets.handler
+    events:
+      - http:
+          method: get
+          path: /v2/assets
+
+  v2-orderbook:
+    handler: src/v2/orderbook.handler
+    events:
+      - http:
+          method: get
+          path: "/v2/orderbook/{pair}"
+
+  v2-trades:
+    handler: src/v2/trades.handler
+    events:
+      - http:
+          method: get
+          path: "/v2/trades/{pair}"
+
+  404:
+    handler: src/404.handler
+    events:
+      - http:
+          method: get
+          path: "/{catchall+}"
+

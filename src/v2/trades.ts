@@ -1,34 +1,27 @@
 import { getAddress } from '@ethersproject/address'
-import { NowRequest, NowResponse } from '@now/node'
+import { APIGatewayProxyHandler } from 'aws-lambda'
 import BigNumber from 'bignumber.js'
 
 import { getSwaps } from './_shared'
-import { return200, return400, return500 } from '../utils/response'
+import { createSuccessResponse, createBadRequestResponse, createServerErrorResponse } from '../utils/response'
 
-export default async function(req: NowRequest, res: NowResponse): Promise<void> {
-  if (
-    !req.query.pair ||
-    typeof req.query.pair !== 'string' ||
-    !/^0x[0-9a-fA-F]{40}_0x[0-9a-fA-F]{40}$/.test(req.query.pair)
-  ) {
-    return400(res, 'Invalid pair identifier: must be of format tokenAddress_tokenAddress')
-    return
+export const handler: APIGatewayProxyHandler = async event => {
+  if (!event.pathParameters?.pair || !/^0x[0-9a-fA-F]{40}_0x[0-9a-fA-F]{40}$/.test(event.pathParameters.pair)) {
+    return createBadRequestResponse('Invalid pair identifier: must be of format tokenAddress_tokenAddress')
   }
 
-  const [tokenA, tokenB] = req.query.pair.split('_')
+  const [tokenA, tokenB] = event.pathParameters.pair.split('_')
   let idA: string, idB: string
   try {
     ;[idA, idB] = [getAddress(tokenA), getAddress(tokenB)]
   } catch (error) {
-    return400(res)
-    return
+    return createBadRequestResponse('Invalid pair identifier: both asset identifiers must be *checksummed* addresses')
   }
 
   try {
     const swaps = await getSwaps(idA, idB)
 
-    return200(
-      res,
+    return createSuccessResponse(
       swaps.map(swap => {
         const aIn = swap.amountAIn !== '0'
         const aOut = swap.amountAOut !== '0'
@@ -56,6 +49,6 @@ export default async function(req: NowRequest, res: NowResponse): Promise<void> 
       60 * 15 // cache for 15 minutes
     )
   } catch (error) {
-    return500(res, error)
+    return createServerErrorResponse(error)
   }
 }

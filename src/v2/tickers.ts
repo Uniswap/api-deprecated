@@ -1,7 +1,6 @@
 import { getAddress } from '@ethersproject/address'
-import { NowRequest, NowResponse } from '@now/node'
-
-import { return200, return500 } from '../utils/response'
+import { APIGatewayProxyHandler } from 'aws-lambda'
+import { createSuccessResponse, createServerErrorResponse } from '../utils/response'
 import { getTopPairs } from './_shared'
 
 interface ReturnShape {
@@ -18,11 +17,10 @@ interface ReturnShape {
   }
 }
 
-export default async function(req: NowRequest, res: NowResponse): Promise<void> {
+export const handler: APIGatewayProxyHandler = async event => {
   try {
     const pairs = await getTopPairs()
-    return200(
-      res,
+    return createSuccessResponse(
       pairs.reduce<ReturnShape>((accumulator, pair): ReturnShape => {
         const id0 = getAddress(pair.token0.id)
         const id1 = getAddress(pair.token1.id)
@@ -44,6 +42,6 @@ export default async function(req: NowRequest, res: NowResponse): Promise<void> 
       60 // cache for 1 minute
     )
   } catch (error) {
-    return500(res, error)
+    return createServerErrorResponse(error)
   }
 }

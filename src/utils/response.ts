@@ -1,25 +1,28 @@
-import { NowResponse } from '@now/node'
+import { APIGatewayProxyResult } from 'aws-lambda'
 
-export function return200(res: NowResponse, body: any, maxAge: number): NowResponse {
-  res.setHeader('Cache-Control', `max-age=0, s-maxage=${maxAge}`)
-  res.status(200).json(body)
-  return res
+export function createResponse(statusCode: number, body: any, { maxAge }: { maxAge: number }): APIGatewayProxyResult {
+  return {
+    body: JSON.stringify(body),
+    statusCode,
+    headers: {
+      'content-type': 'application/json',
+      'cache-control': `max-age=${maxAge}, s-maxage=${maxAge}`
+    }
+  }
 }
 
-export function returnError(res: NowResponse, code: number, message: string): NowResponse {
-  res.setHeader('Content-Type', 'application/json')
-
-  res.status(code).json({
-    errorCode: code,
-    message
-  })
-  return res
+export function createSuccessResponse(body: any, maxAge: number): APIGatewayProxyResult {
+  return createResponse(200, body, { maxAge })
 }
 
-export function return400(res: NowResponse, message: string = 'Bad request'): NowResponse {
-  return returnError(res, 400, message)
+export function createErrorResponse(code: number, message: string): APIGatewayProxyResult {
+  return createResponse(code, { errorCode: code, message }, { maxAge: 0 })
 }
 
-export function return500(res: NowResponse, error: Error): NowResponse {
-  return returnError(res, 500, error.message)
+export function createBadRequestResponse(message: string = 'Bad request'): APIGatewayProxyResult {
+  return createErrorResponse(400, message)
+}
+
+export function createServerErrorResponse(error: Error): APIGatewayProxyResult {
+  return createErrorResponse(500, error.message)
 }
