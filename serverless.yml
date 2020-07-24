@@ -11,9 +11,9 @@ provider:
   logRetentionInDays: 1
   apiKeys:
     - test:
-        - TEST_KEY
+        - TEST_API_KEY
     - prod:
-        - ${env:COINMARKETCAP_KEY}
+        - COINMARKETCAP_API_KEY
   usagePlan:
     - test:
         quota:
@@ -36,12 +36,13 @@ custom:
     enabled: true
     clusterSize: '0.5' # defaults to '0.5'
     ttlInSeconds: 300 # defaults to the maximum allowed: 3600
-
+  contentEncoding:
+    minimumCompressionSize: 0 # Minimum body size required for compression in bytes
 
 plugins:
-  - serverless-dotenv-plugin
   - serverless-plugin-typescript
   - serverless-api-gateway-caching
+  - serverless-content-encoding
 
 functions:
   v1-summary:
@@ -162,14 +163,3 @@ functions:
             cacheKeyParameters:
               - name: request.path.pair
             ttlInSeconds: 900
-
-  404:
-    handler: src/404.handler
-    events:
-      - http:
-          method: get
-          path: "/{catchall+}"
-          caching:
-            enabled: true
-            ttlInSeconds: 3600
-

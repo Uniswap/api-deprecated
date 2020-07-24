@@ -27,7 +27,7 @@
     "prettier": "^1.18.2",
     "serverless": "^1.75.1",
     "serverless-api-gateway-caching": "^1.4.1",
-    "serverless-dotenv-plugin": "^2.4.2",
+    "serverless-content-encoding": "^1.1.0",
     "serverless-plugin-typescript": "^1.1.9",
     "typescript": "^3.9.7"
   },

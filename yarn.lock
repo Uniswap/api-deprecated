@@ -2996,11 +2996,6 @@ dot-qs@0.2.0:
   resolved "https://registry.yarnpkg.com/dot-qs/-/dot-qs-0.2.0.tgz#d36517fe24b7cda61fce7a5026a0024afaf5a439"
   integrity sha1-02UX/iS3zaYfznpQJqACSvr1pDk=
 
-dotenv-expand@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/dotenv-expand/-/dotenv-expand-5.1.0.tgz#3fbaf020bfd794884072ea26b1e9791d45a629f0"
-  integrity sha512-YXQl1DSa4/PQyRfgrv6aoNjhasp/p4qs9FjJ4q4cQk+8m4r6k4ZSiEyytKG8f8W9gi8WsQtIObNmKd+tMzNTmA==
-
 dotenv@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-4.0.0.tgz#864ef1379aced55ce6f95debecdce179f7a0cd1d"
@@ -6732,14 +6727,10 @@ serverless-api-gateway-caching@^1.4.1:
     lodash.isempty "^4.4.0"
     lodash.split "^4.4.0"
 
-serverless-dotenv-plugin@^2.4.2:
-  version "2.4.2"
-  resolved "https://registry.yarnpkg.com/serverless-dotenv-plugin/-/serverless-dotenv-plugin-2.4.2.tgz#b778e43f9048d8292b3823a0c83f2367c909a5ed"
-  integrity sha512-UDJmMzYJ8by2BAYoDu+TirxT65y6MNIzAk0Eszy+H6ZSJsPu1YRNRxyyTof4kaQ5bGqhGUmuZvutHoSffb1obg==
-  dependencies:
-    chalk "^3.0.0"
-    dotenv "^8.2.0"
-    dotenv-expand "^5.1.0"
+serverless-content-encoding@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/serverless-content-encoding/-/serverless-content-encoding-1.1.0.tgz#d284fb16ac25f8603d42dcc3afa826438baf5b01"
+  integrity sha1-0oT7Fqwl+GA9QtzDr6gmQ4uvWwE=
 
 serverless-plugin-typescript@^1.1.9:
   version "1.1.9"
