@@ -5,6 +5,7 @@ frameworkVersion: ">=1.75.1 <2.0.0"
 
 provider:
   name: aws
+  endpointType: REGIONAL
   runtime: nodejs12.x
   memorySize: 320 # optional, in MB, default is 1024
   timeout: 20 # optional, in seconds, default is 6
