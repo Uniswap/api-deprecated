@@ -17,10 +17,16 @@ provider:
         - COINMARKETCAP_API_KEY
   usagePlan:
     - test:
+        quota:
+          limit: 500000 # 5 * 60 * 60 * 24
+          period: DAY
         throttle:
           burstLimit: 10
           rateLimit: 5
     - prod:
+        quota:
+          limit: 5000000 # 50 * 60 * 60 * 24 rounded up
+          period: DAY
         throttle:
           burstLimit: 100
           rateLimit: 50
