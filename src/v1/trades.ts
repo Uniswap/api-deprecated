@@ -18,8 +18,7 @@ export const handler: APIGatewayProxyHandler = async event => {
           quote_volume: trades.tokenAmount,
           trade_timestamp: trades.timestamp,
           type: trades.type
-        })),
-        60 * 15 // cache for 15 minutes
+        }))
       )
     })
     .catch(error => createServerErrorResponse(error))

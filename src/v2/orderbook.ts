@@ -24,13 +24,10 @@ export const handler: APIGatewayProxyHandler = async event => {
 
     const timestamp = new Date().getTime()
 
-    return createSuccessResponse(
-      {
-        timestamp,
-        ...computeBidsAsks(new BigNumber(reservesA), new BigNumber(reservesB))
-      },
-      60 * 240
-    )
+    return createSuccessResponse({
+      timestamp,
+      ...computeBidsAsks(new BigNumber(reservesA), new BigNumber(reservesB))
+    })
   } catch (error) {
     return createServerErrorResponse(error)
   }

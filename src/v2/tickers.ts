@@ -17,7 +17,7 @@ interface ReturnShape {
   }
 }
 
-export const handler: APIGatewayProxyHandler = async event => {
+export const handler: APIGatewayProxyHandler = async () => {
   try {
     const pairs = await getTopPairs()
     return createSuccessResponse(
@@ -38,8 +38,7 @@ export const handler: APIGatewayProxyHandler = async event => {
         }
 
         return accumulator
-      }, {}),
-      60 // cache for 1 minute
+      }, {})
     )
   } catch (error) {
     return createServerErrorResponse(error)

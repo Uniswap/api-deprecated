@@ -8,7 +8,7 @@ interface ReturnShape {
   [tokenIds: string]: { last_price: string; base_volume: string; quote_volume: string }
 }
 
-export const handler: APIGatewayProxyHandler = async event => {
+export const handler: APIGatewayProxyHandler = async () => {
   try {
     const pairs = await getTopPairs()
 
@@ -22,8 +22,7 @@ export const handler: APIGatewayProxyHandler = async event => {
           quote_volume: pair.volumeToken1
         }
         return accumulator
-      }, {}),
-      60 * 15 // cache for 15 minutes
+      }, {})
     )
   } catch (error) {
     return createServerErrorResponse(error)

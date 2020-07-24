@@ -8,7 +8,7 @@ interface ReturnShape {
   [tokenAddress: string]: { id: string; name: string; symbol: string; maker_fee: '0'; taker_fee: '0.003' }
 }
 
-export const handler: APIGatewayProxyHandler = async event => {
+export const handler: APIGatewayProxyHandler = async () => {
   try {
     const pairs = await getTopPairs()
     const tokens = pairs.reduce<{
@@ -27,7 +27,7 @@ export const handler: APIGatewayProxyHandler = async event => {
       }
       return memo
     }, {})
-    return createSuccessResponse(tokens, 60 * 60 * 24)
+    return createSuccessResponse(tokens)
   } catch (error) {
     return createServerErrorResponse(error)
   }
