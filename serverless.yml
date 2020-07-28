@@ -11,25 +11,32 @@ provider:
   timeout: 20 # optional, in seconds, default is 6
   logRetentionInDays: 1
   apiKeys:
-    - test:
+    - low:
         - TEST_API_KEY
-    - prod:
+    - medium:
         - COINMARKETCAP_API_KEY
   usagePlan:
-    - test:
+    - low: # 5 QPS
         quota:
           limit: 500000 # 5 * 60 * 60 * 24
           period: DAY
         throttle:
           burstLimit: 10
           rateLimit: 5
-    - prod:
+    - medium: # 50 QPS
         quota:
           limit: 5000000 # 50 * 60 * 60 * 24 rounded up
           period: DAY
         throttle:
           burstLimit: 100
           rateLimit: 50
+    - high: # 100 QPS
+        quota:
+          limit: 10000000 # 100 * 60 * 60 * 24 rounded up
+          period: DAY
+        throttle:
+          burstLimit: 200
+          rateLimit: 100
 
 custom:
   # Enable or disable caching globally
