@@ -24,3 +24,11 @@ The documentation of the `/v1/` endpoints is [here](./v1.md).
 ## V2 Documentation
 
 The documentation of the `/v2/` endpoints is [here](./v2.md).
+
+## Deploying the API
+
+The API uses the [serverless framework](https://serverless.com) and can easily be deployed to any AWS account,
+via the `yarn sls deploy` command.
+
+In order to configure your AWS account as a target, 
+see [the serverless docs](https://www.serverless.com/framework/docs/providers/aws/guide/credentials/).
