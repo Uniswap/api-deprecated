@@ -2016,6 +2016,7 @@ export interface User_Filter {
 export type PairsVolumeQueryVariables = Exact<{
   limit: Scalars['Int'];
   pairIds: ReadonlyArray<Scalars['ID']>;
+  blockNumber: Scalars['Int'];
 }>;
 
 

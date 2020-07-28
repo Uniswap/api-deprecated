@@ -64,7 +64,6 @@ export async function getTopPairs(): Promise<MappedDetailedPair[]> {
     throw new Error('Failed to fetch top pairs from the subgraph')
   }
 
-  // workaround for https://github.com/graphprotocol/graph-node/issues/1460
   const {
     data: { pairVolumes },
     errors: yesterdayVolumeErrors
@@ -72,7 +71,8 @@ export async function getTopPairs(): Promise<MappedDetailedPair[]> {
     query: PAIRS_VOLUME_QUERY,
     variables: {
       limit: TOP_PAIR_LIMIT,
-      pairIds: pairs.map(pair => pair.id)
+      pairIds: pairs.map(pair => pair.id),
+      blockNumber: +firstBlock
     },
     fetchPolicy: 'no-cache'
   })

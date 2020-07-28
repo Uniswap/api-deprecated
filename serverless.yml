@@ -12,9 +12,9 @@ provider:
   logRetentionInDays: 1
   apiKeys:
     - low:
-        - TEST_API_KEY
+        - TEST_API_KEY_LOW
     - medium:
-        - COINMARKETCAP_API_KEY
+        - COINMARKETCAP_API_KEY_MEDIUM
   usagePlan:
     - low: # 5 QPS
         quota:
