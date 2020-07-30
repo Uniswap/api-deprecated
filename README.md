@@ -13,6 +13,10 @@ V2 Subgraph: https://github.com/Uniswap/uniswap-v2-subgraph
 
 V1 Subgraph: https://github.com/graphprotocol/uniswap-subgraph
 
+## Getting an API Key
+
+Please fill out [this form](https://forms.gle/4xucinVsTTPu71bT6) if you would like to get an API key.
+
 ## Segregated data
 
 Note the data returned by the V1 and V2 endpoints is segregated, i.e. there are no endpoints for combined data from 
