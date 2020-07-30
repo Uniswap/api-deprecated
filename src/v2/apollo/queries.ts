@@ -1,18 +1,8 @@
 import gql from 'graphql-tag'
 
-export const PAIRS_VOLUME_QUERY_STRING = `
-  query PairsVolume($limit: Int!, $pairIds: [ID!]!) {
-    pairVolumes: pairs(first: $limit, where: { id_in: $pairIds }, __BLOCK_NUMBER__) {
-      id
-      volumeToken0
-      volumeToken1
-    }
-  }
-`
-
 export const PAIRS_VOLUME_QUERY = gql`
-  query PairsVolume($limit: Int!, $pairIds: [ID!]!) {
-    pairVolumes: pairs(first: $limit, where: { id_in: $pairIds }) {
+  query PairsVolume($limit: Int!, $pairIds: [ID!]!, $blockNumber: Int!) {
+    pairVolumes: pairs(first: $limit, where: { id_in: $pairIds }, block: { number: $blockNumber }) {
       id
       volumeToken0
       volumeToken1
@@ -59,9 +49,14 @@ export const PAIR_RESERVES_BY_TOKENS = gql`
   }
 `
 
-export const SWAPS_BY_PAIR= gql`
+export const SWAPS_BY_PAIR = gql`
   query SwapsByPair($skip: Int!, $timestamp: BigInt!, $pairAddress: String!) {
-    swaps(skip: $skip, where: { timestamp_gte: $timestamp, pair: $pairAddress }, orderBy: timestamp, orderDirection: asc) {
+    swaps(
+      skip: $skip
+      where: { timestamp_gte: $timestamp, pair: $pairAddress }
+      orderBy: timestamp
+      orderDirection: asc
+    ) {
       id
       timestamp
       amount0In
@@ -73,7 +68,7 @@ export const SWAPS_BY_PAIR= gql`
 `
 
 export const PAIR_FROM_TOKENS = gql`
-  query SwapsByTokens( $token0: String!, $token1: String!) {
+  query SwapsByTokens($token0: String!, $token1: String!) {
     pairs(where: { token0: $token0, token1: $token1 }) {
       id
     }

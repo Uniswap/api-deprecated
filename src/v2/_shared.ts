@@ -1,14 +1,13 @@
 import BigNumber from 'bignumber.js'
-import gql from 'graphql-tag'
 import BLACKLIST from '../constants/blacklist'
 
 import client from './apollo/client'
 import {
   PAIR_RESERVES_BY_TOKENS,
-  PAIRS_VOLUME_QUERY_STRING,
   SWAPS_BY_PAIR,
   TOP_PAIRS,
-  PAIR_FROM_TOKENS
+  PAIR_FROM_TOKENS,
+  PAIRS_VOLUME_QUERY
 } from './apollo/queries'
 import { getBlockFromTimestamp } from './blocks/queries'
 import {
@@ -65,18 +64,15 @@ export async function getTopPairs(): Promise<MappedDetailedPair[]> {
     throw new Error('Failed to fetch top pairs from the subgraph')
   }
 
-  // workaround for https://github.com/graphprotocol/graph-node/issues/1460
-  const volumeQuery = gql`
-    ${PAIRS_VOLUME_QUERY_STRING.replace(/__BLOCK_NUMBER__/g, `block: {number: ${firstBlock}}`)}
-  `
   const {
     data: { pairVolumes },
     errors: yesterdayVolumeErrors
   } = await client.query<PairsVolumeQuery, PairsVolumeQueryVariables>({
-    query: volumeQuery,
+    query: PAIRS_VOLUME_QUERY,
     variables: {
       limit: TOP_PAIR_LIMIT,
-      pairIds: pairs.map(pair => pair.id)
+      pairIds: pairs.map(pair => pair.id),
+      blockNumber: +firstBlock
     },
     fetchPolicy: 'no-cache'
   })

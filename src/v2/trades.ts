@@ -45,8 +45,7 @@ export const handler: APIGatewayProxyHandler = async event => {
           price:
             baseAmount !== '0' ? new BigNumber(quoteAmount).dividedBy(new BigNumber(baseAmount)).toString() : undefined
         }
-      }),
-      60 * 15 // cache for 15 minutes
+      })
     )
   } catch (error) {
     return createServerErrorResponse(error)

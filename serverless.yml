@@ -1,30 +1,72 @@
 service:
-  name: uniswap-api
+  name: uniswap-api-auth
 
 frameworkVersion: ">=1.75.1 <2.0.0"
 
 provider:
   name: aws
+  endpointType: REGIONAL
   runtime: nodejs12.x
   memorySize: 320 # optional, in MB, default is 1024
   timeout: 20 # optional, in seconds, default is 6
   logRetentionInDays: 1
+  apiKeys:
+    - low:
+        - TEST_API_KEY
+        - yIUHxhxhwP
+        - ufxxSsdRrB
+        - setudwgeMI
+        - pKlGUlgrkV
+        - dAcHvVqcaR
+        - nVDzSKvsKS
+        - YSbeEYACJs
+        - oIdwHwSSXx
+        - yBMIcmKTGj
+        - kNsdnRebNm
+        - hhKIoosmpJ
+        - vKUsOeHgoX
+        - dXLuUQNcVD
+    - medium:
+        - COINMARKETCAP_API_KEY
+        - GbrOiQnhbE
+        - hoBoxSZDSr
 
+  usagePlan:
+    - low: # 5 QPS
+        quota:
+          limit: 500000 # 5 * 60 * 60 * 24
+          period: DAY
+        throttle:
+          burstLimit: 10
+          rateLimit: 5
+    - medium: # 50 QPS
+        quota:
+          limit: 5000000 # 50 * 60 * 60 * 24 rounded up
+          period: DAY
+        throttle:
+          burstLimit: 100
+          rateLimit: 50
+    - high: # 100 QPS
+        quota:
+          limit: 10000000 # 100 * 60 * 60 * 24 rounded up
+          period: DAY
+        throttle:
+          burstLimit: 200
+          rateLimit: 100
+
+custom:
+  # Enable or disable caching globally
+  apiGatewayCaching:
+    enabled: true
+    clusterSize: '0.5' # defaults to '0.5'
+    ttlInSeconds: 300 # defaults to the maximum allowed: 3600
+  contentEncoding:
+    minimumCompressionSize: 0 # Minimum body size required for compression in bytes
 
 plugins:
   - serverless-plugin-typescript
-  - serverless-api-cloudfront
-
-custom:
-  apiCloudFront:
-    domain: api.uniswap.info
-    certificate: "arn:aws:acm:us-east-1:870337023970:certificate/442d57cb-e33e-45d1-b836-5fd0abd57930"
-    compress: true
-    cookies: none
-    headers: none
-    querystring: none
-    priceClass: PriceClass_100
-    minimumProtocolVersion: TLSv1
+  - serverless-api-gateway-caching
+  - serverless-content-encoding
 
 functions:
   v1-summary:
@@ -33,6 +75,10 @@ functions:
       - http:
           method: get
           path: /v1/summary
+          private: true
+          caching:
+            enabled: true
+            ttlInSeconds: 900
 
   v1-tickers:
     handler: src/v1/tickers.handler
@@ -40,6 +86,10 @@ functions:
       - http:
           method: get
           path: /v1/tickers
+          private: true
+          caching:
+            enabled: true
+            ttlInSeconds: 60
 
   v1-assets:
     handler: src/v1/assets.handler
@@ -47,6 +97,10 @@ functions:
       - http:
           method: get
           path: /v1/assets
+          private: true
+          caching:
+            enabled: true
+            ttlInSeconds: 3600
 
   v1-orderbook:
     handler: src/v1/orderbook.handler
@@ -54,6 +108,13 @@ functions:
       - http:
           method: get
           path: "/v1/orderbook/{pair}"
+          private: true
+          caching:
+            enabled: true
+            cacheKeyParameters:
+              - name: request.path.pair
+            ttlInSeconds: 3600
+
 
   v1-trades:
     handler: src/v1/trades.handler
@@ -61,6 +122,12 @@ functions:
       - http:
           method: get
           path: "/v1/trades/{pair}"
+          private: true
+          caching:
+            enabled: true
+            cacheKeyParameters:
+              - name: request.path.pair
+            ttlInSeconds: 900
 
   v2-summary:
     handler: src/v2/summary.handler
@@ -68,6 +135,10 @@ functions:
       - http:
           method: get
           path: /v2/summary
+          private: true
+          caching:
+            enabled: true
+            ttlInSeconds: 900
 
   v2-tickers:
     handler: src/v2/tickers.handler
@@ -75,7 +146,10 @@ functions:
       - http:
           method: get
           path: /v2/tickers
-
+          private: true
+          caching:
+            enabled: true
+            ttlInSeconds: 60
 
   v2-assets:
     handler: src/v2/assets.handler
@@ -83,6 +157,10 @@ functions:
       - http:
           method: get
           path: /v2/assets
+          private: true
+          caching:
+            enabled: true
+            ttlInSeconds: 3600
 
   v2-orderbook:
     handler: src/v2/orderbook.handler
@@ -90,6 +168,12 @@ functions:
       - http:
           method: get
           path: "/v2/orderbook/{pair}"
+          private: true
+          caching:
+            enabled: true
+            cacheKeyParameters:
+              - name: request.path.pair
+            ttlInSeconds: 3600
 
   v2-trades:
     handler: src/v2/trades.handler
@@ -97,11 +181,9 @@ functions:
       - http:
           method: get
           path: "/v2/trades/{pair}"
-
-  404:
-    handler: src/404.handler
-    events:
-      - http:
-          method: get
-          path: "/{catchall+}"
-
+          private: true
+          caching:
+            enabled: true
+            cacheKeyParameters:
+              - name: request.path.pair
+            ttlInSeconds: 900

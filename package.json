@@ -26,7 +26,8 @@
     "eslint-config-prettier": "^6.0.0",
     "prettier": "^1.18.2",
     "serverless": "^1.75.1",
-    "serverless-api-cloudfront": "^0.9.5",
+    "serverless-api-gateway-caching": "^1.4.1",
+    "serverless-content-encoding": "^1.1.0",
     "serverless-plugin-typescript": "^1.1.9",
     "typescript": "^3.9.7"
   },

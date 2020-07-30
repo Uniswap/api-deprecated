@@ -10,14 +10,11 @@ export const handler: APIGatewayProxyHandler = async event => {
 
   return await getOrderbook(event.pathParameters.pair.substring(4))
     .then(orderbook => {
-      return createSuccessResponse(
-        {
-          timestamp: orderbook.timestamp,
-          bids: orderbook.bids,
-          asks: orderbook.asks
-        },
-        60 * 240 // cache for 15 minutes
-      )
+      return createSuccessResponse({
+        timestamp: orderbook.timestamp,
+        bids: orderbook.bids,
+        asks: orderbook.asks
+      })
     })
     .catch(error => createServerErrorResponse(error))
 }

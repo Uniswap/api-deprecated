@@ -2,7 +2,7 @@ import { APIGatewayProxyHandler } from 'aws-lambda'
 import { getTopPairsData } from './_shared'
 import { createSuccessResponse, createServerErrorResponse } from '../utils/response'
 
-export const handler: APIGatewayProxyHandler = async event => {
+export const handler: APIGatewayProxyHandler = async () => {
   return await getTopPairsData()
     .then(([topPairs, topPairsData]) => {
       return createSuccessResponse(
@@ -24,8 +24,7 @@ export const handler: APIGatewayProxyHandler = async event => {
           }
 
           return accumulator
-        }, {}),
-        60 * 15 // cache for 15 minutes
+        }, {})
       )
     })
     .catch(error => createServerErrorResponse(error))
