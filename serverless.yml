@@ -12,9 +12,25 @@ provider:
   logRetentionInDays: 1
   apiKeys:
     - low:
-        - TEST_API_KEY_LOW
+        - TEST_API_KEY
+        - yIUHxhxhwP
+        - ufxxSsdRrB
+        - setudwgeMI
+        - pKlGUlgrkV
+        - dAcHvVqcaR
+        - nVDzSKvsKS
+        - YSbeEYACJs
+        - oIdwHwSSXx
+        - yBMIcmKTGj
+        - kNsdnRebNm
+        - hhKIoosmpJ
+        - vKUsOeHgoX
+        - dXLuUQNcVD
     - medium:
-        - COINMARKETCAP_API_KEY_MEDIUM
+        - COINMARKETCAP_API_KEY
+        - GbrOiQnhbE
+        - hoBoxSZDSr
+
   usagePlan:
     - low: # 5 QPS
         quota:
