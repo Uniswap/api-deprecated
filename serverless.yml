@@ -29,10 +29,42 @@ provider:
         - VieGsbhHec
         - NTpdZhNBxm
         - izPomEygRE
+        - UZPPvKX6l1
+        - PNcYknUTqy
+        - VN50kkZEQI
+        - cBe13HPpll
+        - 8yHjwNSrim
+        - 8hhD0ZfjRD
+        - qaQj0g3vH9
+        - NMp3sBgNEk
+        - lNrVRqdXdf
+        - p8idnRO9GC
+        - bvB3Z3NbDm
+        - zsmy4mC7Tx
+        - wfZCQXXJbs
+        - qPJ8zA1Rn0
+        - aQyVkeFJII
+        - mB3CSraA8T
+        - fAO8AZLbQE
     - medium:
         - COINMARKETCAP_API_KEY
         - GbrOiQnhbE
         - hoBoxSZDSr
+        - XufHyw87Ae
+        - qMhEkai3bB
+        - RoaHDgKAhb
+        - AWsHhhEwUx
+        - 4LQCKVk0vR
+        - sJ5M9hxrm1
+        - pH8JxYytcI
+        - 75cuj2bkyw
+        - H9ruGLVhUx
+        - TwVPzztRXM
+        - U0IdLesY5B
+        - nrClJ0PWhN
+        - 4S2KR4csrv
+        - AmSu8dL7BP
+
 
   usagePlan:
     - low: # 5 QPS
