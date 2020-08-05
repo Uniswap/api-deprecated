@@ -46,6 +46,11 @@ provider:
         - aQyVkeFJII
         - mB3CSraA8T
         - fAO8AZLbQE
+        - gPCcDTPZXF
+        - 0kfMaFd9JR
+        - gWZDDJaUDt
+        - V0dPz113px
+        - pmSDCVBASa
     - medium:
         - COINMARKETCAP_API_KEY
         - GbrOiQnhbE
@@ -64,6 +69,10 @@ provider:
         - nrClJ0PWhN
         - 4S2KR4csrv
         - AmSu8dL7BP
+        - eKhKY5guZK
+        - A0AWtiLruO
+        - I4C1gAanei
+        - zRQVdRimQb
 
 
   usagePlan:
