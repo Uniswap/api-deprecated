@@ -17,6 +17,14 @@ V1 Subgraph: https://github.com/graphprotocol/uniswap-subgraph
 
 Please fill out [this form](https://forms.gle/4xucinVsTTPu71bT6) if you would like to get an API key.
 
+## Using an API Key
+
+You can use an API key by setting it in the `x-api-key` header, like so:
+
+```sh
+curl -v --compressed https://api.uniswap.info/v2/tickers -H 'x-api-key: abcd1234'
+```
+
 ## Segregated data
 
 Note the data returned by the V1 and V2 endpoints is segregated, i.e. there are no endpoints for combined data from 
